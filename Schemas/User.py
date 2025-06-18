@@ -3,6 +3,7 @@ from pydantic import BaseModel,EmailStr;
 from typing import Optional;
 
 class UserSignup(BaseModel):
+    id:int
     name:str
     email:EmailStr
     password:str
