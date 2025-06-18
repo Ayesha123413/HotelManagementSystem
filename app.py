@@ -5,7 +5,7 @@ import random
 
 url=config("SUPABASE_URL")
 key=config("SUPABASE_KEY")
-
+jwt=config("SUPABASE_JWT_SECRET")
 
 app=FastAPI()
 supabase : Client =create_client(url,key)
