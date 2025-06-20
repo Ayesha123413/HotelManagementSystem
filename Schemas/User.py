@@ -1,9 +1,9 @@
 
 from pydantic import BaseModel,EmailStr;
 from typing import Optional;
+# from uuid import UUID
 
 class UserSignup(BaseModel):
-    id:int
     name:str
     email:EmailStr
     password:str
@@ -14,12 +14,12 @@ class UserLogin(BaseModel):
     
 class SignupResponse(BaseModel):
     message:str
-    user_id:int
+    user_id:str
     email:EmailStr
 class LoginResponse(BaseModel):
     message:str
     access_token:str
     refresh_token:str
     token_type:str="bearer"
-    user_id:int
+    user_id:str
     email:EmailStr
