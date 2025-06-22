@@ -4,6 +4,9 @@ from decouple import config;
 import random
 from Schemas.User import UserSignup,SignupResponse,UserLogin,LoginResponse
 from passlib.context import CryptContext
+from Routers import room
+from fastapi.openapi.utils import get_openapi
+from fastapi.security import HTTPBearer
 
 
 
@@ -11,8 +14,9 @@ url=config("SUPABASE_URL")
 key=config("SUPABASE_KEY")
 # jwt=config("SUPABASE_JWT_SECRET")
 app=FastAPI()
-
 supabase : Client =create_client(url,key)
+
+
 
 pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
 
@@ -78,3 +82,6 @@ async def login_user(credentials:UserLogin):
 
 
     )
+
+
+app.include_router(room.router)

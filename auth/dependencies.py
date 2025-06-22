@@ -1,22 +1,30 @@
 from fastapi import FastAPI,HTTPException,Depends,status,Header
-from supabase import create_client,client
+from supabase import create_client,Client
 from decouple import config
 import jwt
+from fastapi.security import HTTPAuthorizationCredentials,HTTPBearer
 
+security=HTTPBearer()
 
 url=config("SUPABASE_URL")
-key=config("SUPABSE_KEY")
+key=config("SUPABASE_KEY")
 
-supabase:client=create_client(url,key)
+supabase:Client=create_client(url,key)
 
 
-def get_current_user(authorization:str=Header(...)):
+def get_current_user(credentials:HTTPAuthorizationCredentials=Header(security)):
     try:
-        if not authorization.startswith("Bearer"):
-            raise ValueError("invalid token")
-        token=authorization.split(" ")[1]
-        user_info=supabase.auth.get_user(token)
-        return user_info.user
+       token=credentials.credentials
+    #    print("credential:",token)
+       user_info=supabase.auth.get_user(token)
+       print("user Info:",user_info)
+
+       if not user_info.user:
+           raise HTTPException(
+               status_code=status.HTTP_401_UNAUTHORIZED,
+               detail="user not found"
+           )
+       return user_info.user
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
