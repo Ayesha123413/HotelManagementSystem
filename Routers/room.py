@@ -46,4 +46,16 @@ async def edit_room(
         raise HTTPException(status_code=500,detail="failed to update")
     return{"message":f"Room {room_no} is succesfully updated"}
 
+@router.get("/getRoom{room_no}",status_code=status.HTTP_200_OK)
+async def get_room(
+    room_no:int,
+    current_user=Depends(get_current_user)
+    ):
+    existing=supabase.table("Rooms").select("*").eq("room_number",room_no).execute()
+    if not existing.data:
+        raise HTTPException(status_code=404, detail="room does not exist")
+    result=supabase.table("Rooms").select("*").eq("room_number",room_no).execute()
+    return{"room":result.data[0]}
+
+
 
