@@ -59,3 +59,8 @@ async def get_room(
 
 
 
+
+@router.get("/",status_code=status.HTTP_200_OK)
+async def get_all_room(current_user=Depends(get_current_user)):
+    result=supabase.table("Rooms").select("*").execute()
+    return{"Rooms":result.data}
